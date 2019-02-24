@@ -44,11 +44,9 @@ async def on_message(message):
         # open the credit vault obtain their credit balance
         credit_vault = open("creditVault.csv", "w+")
         author_balance = credit_vault.read()
-        tagged_balance = 0
 
         # obtain users credit balance
         credit_operation["author_balance"] = author_balance
-        credit_operation["tagged_balance"] = tagged_balance
 
         # start variable of creditRequest = message.content
         # check to see if there is a second parameter
@@ -59,11 +57,18 @@ async def on_message(message):
 #     check response to see if it doesn't containt (give, request, destroy, rob)
 #       then return 'Transaction ended.'
 #     append to new message content to credit request
-#   if third param doesn't exist ask 'who would you like' second param ' credits to or from?'
+
+        # if third param doesn't exist ask 'who would you like' second param ' credits to or from?'
+        if credit_operation['tagged_user'] is None or (credit_operation['tagged_user'].startswith("<@") and credit_operation['tagged_user'].endswith(">") and len(credit_operation['tagged_user']) == 21):
+            print ('Second parameter is invalid')
 #     a recursive loop that checks that i has been called less than three times
 #       wait for a user based response
 #       if the response wasn't user based then reply 'Invalid transaction recipient'
 #       recursively call this with
+#     assume we have a good parameter now and get the tagged_user credit balance
+        tagged_balance = credit_vault.read()
+        credit_operation["tagged_balance"] = tagged_balance
+
 #     if third param doesn't exist and i is equal to or greater than 3
 #       return 'Transaction ended, invalid recipient.'
 #   check the second param against a switch statement
