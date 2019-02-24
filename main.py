@@ -31,7 +31,7 @@ async def on_message(message):
         # explode the given statement
         user_input = message.content.split(" ")
 
-        # create user based object to work off of
+        # create command based dictionary to work off of
         credit_operation = {
             "author": message.author,
             "author_balance": 0,
@@ -41,7 +41,7 @@ async def on_message(message):
             "credit_amount": user_input[3]
         }
 
-        # open the credit vault obtain their credit balance creditBalance = user.credits
+        # open the credit vault obtain their credit balance
         credit_vault = open("creditVault.csv", "w+")
         author_balance = credit_vault.read()
         tagged_balance = 0
