@@ -3,7 +3,7 @@ import asyncio
 import os
 
 client = discord.Client()
-
+DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
 
 @client.event
 async def on_ready():
@@ -29,9 +29,27 @@ async def on_message(message):
     # if someone says credits
     if message.content.startswith('!credits'):
         # explode the given statement
-        userInput = message.content.split(" ")
-        # obtain their credit balance creditBalance = user.credits
-        credit_balance = open("creditVault.csv", "r+")
+        user_input = message.content.split(" ")
+
+        # create user based object to work off of
+        credit_operation = {
+            "author": message.author,
+            "author_balance": 0,
+            "operator": user_input[1],
+            "tagged_user": user_input[2],
+            "tagged_balance": 0,
+            "credit_amount": user_input[3]
+        }
+
+        # open the credit vault obtain their credit balance creditBalance = user.credits
+        credit_vault = open("creditVault.csv", "w+")
+        author_balance = credit_vault.read()
+        tagged_balance = 0
+
+        # obtain users credit balance
+        credit_operation["author_balance"] = author_balance
+        credit_operation["tagged_balance"] = tagged_balance
+
         # start variable of creditRequest = message.content
         # check to see if there is a second parameter
 
@@ -81,5 +99,4 @@ async def on_message(message):
 #       else
 #         return 'Better luck next time, it was a 1 out of ' attemptedNumber ' it\'s all RNG'
 #       some zany logic that will use the csv to apply a time date for last attempted robbery and lastRobbed
-
-client.run(os.getenv("DISCORD_TOKEN"))
+client.run(DISCORD_TOKEN)
