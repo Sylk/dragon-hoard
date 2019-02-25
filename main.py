@@ -25,7 +25,8 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    # credit giving structure: credits (give, request, destroy, rob) @snowflakeUserId creditAmount
+    # TODO: Give users a structure to use if they say !credits and provide no params
+    # INFO: credit giving structure: credits (give, request, destroy, rob) @snowflakeUserId creditAmount
     # if someone says credits
     if message.content.startswith('!credits'):
         # explode the given statement
@@ -48,28 +49,37 @@ async def on_message(message):
         # obtain users credit balance
         credit_operation["author_balance"] = author_balance
 
-        # start variable of creditRequest = message.content
-        # check to see if there is a second parameter
+        # TODO: There is potential to optimize it with a python equivalent of this http://es6-features.org/#RestParameter
+        # if second param doesnt exist ask 'what would you like do with credits? Options: Give, Request, Destroy, Rob'
+        if credit_operation['operator'] is None or (
+                credit_operation['operator'] == 'give'
+                or credit_operation['operator'] == 'request'
+                or credit_operation['operator'] == 'destroy'
+                or credit_operation['operator'] == 'rob'):
+                # wait for a response
+                # check response to see if it doesn't containt (give, request, destroy, rob)
+                    # then return 'Transaction ended.'
+                    await client.send_message(message.channel, 'Transaction ended')
+            # append to new message content to credit request
+            credit_operation['operator'] = 'input'
 
-
-#   if second param doesnt exist ask 'what would you like do with credits? Options: Give, Request, Destroy, Rob'
-#     wait for a response
-#     check response to see if it doesn't containt (give, request, destroy, rob)
-#       then return 'Transaction ended.'
-#     append to new message content to credit request
-
+        # TODO: could write the second check as regex
         # if third param doesn't exist ask 'who would you like' second param ' credits to or from?'
-        if credit_operation['tagged_user'] is None or (credit_operation['tagged_user'].startswith("<@") and credit_operation['tagged_user'].endswith(">") and len(credit_operation['tagged_user']) == 21):
-            print ('Second parameter is invalid')
-#     a recursive loop that checks that i has been called less than three times
-#       wait for a user based response
-#       if the response wasn't user based then reply 'Invalid transaction recipient'
-#       recursively call this with
-#     assume we have a good parameter now and get the tagged_user credit balance
+        if credit_operation['tagged_user'] is None or (
+                credit_operation['tagged_user'].startswith("<@")
+                and credit_operation['tagged_user'].endswith(">")
+                and len(credit_operation['tagged_user']) == 21):
+                    # ask for a valid user
+                    # wait for a user based response
+                        # if the response wasn't user based then reply 'Invalid transaction recipient'
+                    # assume we have a good parameter now and get the tagged_user credit balance
         tagged_balance = credit_vault.read()
         credit_operation["tagged_balance"] = tagged_balance
 
-#     if third param doesn't exist and i is equal to or greater than 3
+
+#     if third param doesn't exist
+        if credit_operation['credit_amount'] is None or isinstance(credit_operation['credit_amount'], int):
+
 #       return 'Transaction ended, invalid recipient.'
 #   check the second param against a switch statement
 #     case give
