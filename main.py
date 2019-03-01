@@ -84,8 +84,11 @@ async def on_message(message):
 #   check the second param against a switch statement
 #     case give
 #       if creditBalance - creditAmount >= 0
+        if credit_operation['author_balance'] - credit_operation['credit_amount'] >= 0:
+
 #         process csv request against the third param
 #         return 'Transaction completed. Remaining balance: ' creditBalance - creditAmount
+            await client.send_message(message.channel, 'Transaction completed. Remaining balance ' + (credit_operation['author_balance'] - credit_operation['credit_amount']))
 #       else
 #         return 'Insufficient credit balance to process transaction.'
 #     case request
