@@ -28,11 +28,24 @@ async def on_message(message):
     # TODO: Give users a structure to use if they say !credits and provide no params
     # TODO: Confirm it's the same user if they go through the giving cycle in each step
     # TODO: To Lowercase everything that was given in the structure so that it doesn't matter if caps are used
+    # TODO: Make this more oop friendly or functional and less procedural for legibility sake
+
     # INFO: credit giving structure: credits (give, request, destroy, rob) @snowflakeUserId creditAmount
     # if someone says credits
     if message.content.startswith('!credits'):
         # explode the given statement
         user_input = message.content.split(" ")
+
+        # TODO: Change this to a correct loop instead of a series of ifs
+        # Default values here if they don't exist
+        user_input_length = len(user_input)
+        default_inputs = [None, None, 0]
+        if user_input_length <= 1:
+            user_input.append(None)
+        if user_input_length <= 2:
+            user_input.append(None)
+        if user_input_length <= 3:
+            user_input.append(0)
 
         # create command based dictionary to work off of
         credit_operation = {
@@ -62,13 +75,13 @@ async def on_message(message):
             # ask for a valid second parameter
             await client.send_message(message.channel, 'Please provide a valid second parameter. Options: give, request, destroy, or rob')
             operator = await client.wait_for_message(author=message.author, content='$operator')
-            # check response to see if it doesn't containt (give, request, destroy, rob)
-        if operator != 'give' and operator != 'request' and operator != 'destroy' and operator != 'rob':
-            # then return 'Transaction ended.'
-            await client.send_message(message.channel, 'Transaction ended')
-        # append to new message content to credit request
-        credit_operation['operator'] = operator
-
+            # check response to see if it doesn't contain (give, request, destroy, rob)
+            if operator != 'give' and operator != 'request' and operator != 'destroy' and operator != 'rob':
+                # then return 'Transaction ended.'
+                await client.send_message(message.channel, 'Transaction ended')
+            # append to new message content to credit request
+            credit_operation['operator'] = operator
+        await client.send_message(message.channel, 'Operator: ', credit_operation['operator'])
         # TODO: could write the second check as regex
         # if third param doesn't exist ask 'who would you like' second param ' credits to or from?'
         if credit_operation['tagged_user'] is None or (
@@ -76,25 +89,27 @@ async def on_message(message):
                 and credit_operation['tagged_user'].endswith(">")
                 and len(credit_operation['tagged_user']) == 21):
                     # ask for a valid user
+                    await client.send_message(message.channel, 'Please provide a valid third parameter.')
                     # wait for a user based response
                         # if the response wasn't user based then reply 'Invalid transaction recipient'
                     # assume we have a good parameter now and get the tagged_user credit balance
+
         tagged_balance = credit_vault.read()
         credit_operation["tagged_balance"] = tagged_balance
 
+#     if fourth param doesn't exist
+        if isinstance(credit_operation['credit_amount'], int):
+            # return 'Transaction ended, invalid credit amount.'
+            await client.send_message(message.channel, 'Transaction ended, invalid credit amount.')
 
-#     if third param doesn't exist
-        if credit_operation['credit_amount'] is None or isinstance(credit_operation['credit_amount'], int):
-
-#       return 'Transaction ended, invalid recipient.'
 #   check the second param against a switch statement
 #     case give
 #       if creditBalance - creditAmount >= 0
-        if credit_operation['author_balance'] - credit_operation['credit_amount'] >= 0:
+#         if credit_operation['author_balance'] - credit_operation['credit_amount'] >= 0:
 
 #         process csv request against the third param
 #         return 'Transaction completed. Remaining balance: ' creditBalance - creditAmount
-            await client.send_message(message.channel, 'Transaction completed. Remaining balance ' + (credit_operation['author_balance'] - credit_operation['credit_amount']))
+#             await client.send_message(message.channel, 'Transaction completed. Remaining balance ' + (credit_operation['author_balance'] - credit_operation['credit_amount']))
 #       else
 #         return 'Insufficient credit balance to process transaction.'
 #     case request
