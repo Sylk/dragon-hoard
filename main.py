@@ -26,6 +26,8 @@ async def on_ready():
 @client.event
 async def on_message(message):
     # TODO: Give users a structure to use if they say !credits and provide no params
+    # TODO: Confirm it's the same user if they go through the giving cycle in each step
+    # TODO: To Lowercase everything that was given in the structure so that it doesn't matter if caps are used
     # INFO: credit giving structure: credits (give, request, destroy, rob) @snowflakeUserId creditAmount
     # if someone says credits
     if message.content.startswith('!credits'):
@@ -56,12 +58,16 @@ async def on_message(message):
                 or credit_operation['operator'] == 'request'
                 or credit_operation['operator'] == 'destroy'
                 or credit_operation['operator'] == 'rob'):
-                # wait for a response
-                # check response to see if it doesn't containt (give, request, destroy, rob)
-                    # then return 'Transaction ended.'
-                    await client.send_message(message.channel, 'Transaction ended')
-            # append to new message content to credit request
-            credit_operation['operator'] = 'input'
+            # NOTE: Documentation to reference for waiting for a message https://discordpy.readthedocs.io/en/latest/api.html#discord.Client.wait_for_message
+            # ask for a valid second parameter
+            await client.send_message(message.channel, 'Please provide a valid second parameter. Options: give, request, destroy, or rob')
+            operator = await client.wait_for_message(author=message.author, content='$operator')
+            # check response to see if it doesn't containt (give, request, destroy, rob)
+        if operator != 'give' and operator != 'request' and operator != 'destroy' and operator != 'rob':
+            # then return 'Transaction ended.'
+            await client.send_message(message.channel, 'Transaction ended')
+        # append to new message content to credit request
+        credit_operation['operator'] = operator
 
         # TODO: could write the second check as regex
         # if third param doesn't exist ask 'who would you like' second param ' credits to or from?'
