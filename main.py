@@ -27,14 +27,13 @@ async def on_ready():
 async def on_message(message):
     # TODO: Give users a structure to use if they say !credits and provide no params
     # TODO: Confirm it's the same user if they go through the giving cycle in each step
-    # TODO: To Lowercase everything that was given in the structure so that it doesn't matter if caps are used
     # TODO: Make this more oop friendly or functional and less procedural for legibility sake
 
     # INFO: credit giving structure: credits (give, request, destroy, rob) @snowflakeUserId creditAmount
     # if someone says credits
-    if message.content.startswith('!credits'):
+    if message.content.lower().startswith('!credits'):
         # explode the given statement
-        user_input = message.content.split(" ")
+        user_input = message.content.lower().split(" ")
 
         # TODO: Change this to a correct loop instead of a series of ifs
         # Default values here if they don't exist
