@@ -32,9 +32,9 @@ async def on_message(message):
 
     # INFO: credit giving structure: credits (give, request, destroy, rob) @snowflakeUserId creditAmount
     # if someone says credits
-    if message.content.lower().startswith('!credits'):
+    if message.content.startswith('!credits'):
         # explode the given statement
-        user_input = message.content.lower().split(" ")
+        user_input = message.content.split(" ")
 
         # TODO: Change this to a correct loop instead of a series of ifs
         # Default values here if they don't exist
@@ -82,6 +82,8 @@ async def on_message(message):
             # append to new message content to credit request
             credit_operation['operator'] = operator
         await client.send_message(message.channel, 'Operator: ', credit_operation['operator'])
+        # TODO: could write the second check as regex
+        # if third param doesn't exist ask 'who would you like' second param ' credits to or from?'
         if credit_operation['tagged_user'] is None or (
                 credit_operation['tagged_user'].startswith("<@")
                 and credit_operation['tagged_user'].endswith(">")
