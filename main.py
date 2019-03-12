@@ -29,8 +29,13 @@ async def on_message(message):
     # TODO: Confirm it's the same user if they go through the giving cycle in each step
     # TODO: Make this more oop friendly or functional and less procedural for legibility sake
 
-    # INFO: credit giving structure: credits (give, request, destroy, rob) @snowflakeUserId creditAmount
-    # if someone says credits
+    # Show help message when the !credits command is entered
+    if message.content.lower() == '!credits':
+        await client.send_message(message.channel, 'You\'re currently missing parameters in your request.\n\n' +
+                                                   'In order to properly respond we need the following information from your query.\n\n' +
+                                                   '(1)!credits (2)Requested Operation (3)Targeted User (4)Credit Amount\n' +
+                                                   'Requested operations are [Give, Request, Destroy, Rob]')
+
     if message.content.lower().startswith('!credits'):
         # explode the given statement
         user_input = message.content.lower().split(" ")
