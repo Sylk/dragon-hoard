@@ -62,7 +62,9 @@ async def on_message(message):
 
         # open the credit vault obtain their credit balance
         credit_vault = open("creditVault.csv", "w+")
+        # TODO: Actually locate the authors balance
         author_balance = credit_vault.read()
+        # TODO: If no balance exists then default the balance to 0 and create a new record in the CSV
 
         # obtain users credit balance
         credit_operation["author_balance"] = author_balance
@@ -97,7 +99,9 @@ async def on_message(message):
                         # if the response wasn't user based then reply 'Invalid transaction recipient'
                     # assume we have a good parameter now and get the tagged_user credit balance
 
+        # TODO: Actually locate the authors balance
         tagged_balance = credit_vault.read()
+        # TODO: If no balance exists then default the balance to 0 and create a new record in the CSV
         credit_operation["tagged_balance"] = tagged_balance
 
 #     if fourth param doesn't exist
