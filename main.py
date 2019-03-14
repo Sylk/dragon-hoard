@@ -25,7 +25,6 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    # TODO: Give users a structure to use if they say !credits and provide no params
     # TODO: Confirm it's the same user if they go through the giving cycle in each step
     # TODO: Make this more oop friendly or functional and less procedural for legibility sake
 
