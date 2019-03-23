@@ -58,13 +58,17 @@ async def on_message(message):
         # obtain users credit balance
         credit_operation["author_balance"] = author_balance
 
+        await client.send_message(message.channel, credit_operation['operator'])
+
         # TODO: There is potential to optimize it with a python equivalent of this http://es6-features.org/#RestParameter
         # if second param doesnt exist ask 'what would you like do with credits? Options: Give, Request, Destroy, Rob'
-        if credit_operation['operator'] is None or (
-                credit_operation['operator'] == 'give'
-                or credit_operation['operator'] == 'request'
-                or credit_operation['operator'] == 'destroy'
-                or credit_operation['operator'] == 'rob'):
+        if (
+                credit_operation['operator'] is None or (
+                credit_operation['operator'] != 'give'
+                or credit_operation['operator'] != 'request'
+                or credit_operation['operator'] != 'destroy'
+                or credit_operation['operator'] != 'rob')
+        ):
             # NOTE: Documentation to reference for waiting for a message https://discordpy.readthedocs.io/en/latest/api.html#discord.Client.wait_for_message
             # ask for a valid second parameter
             await client.send_message(message.channel, 'Please provide a valid second parameter. Options: give, request, destroy, or rob')
