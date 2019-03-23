@@ -12,17 +12,6 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-    # if message.content.startswith('!credits'):
-    #
-    #        await client.send_message(message.channel, '?')
-    #        await client.send_message(message.channel, 'Who is cool? Type $name namehere')
-    #
-    #        # await client.send_message(message.channel, file_object.read())
-    #    elif message.content.startswith('!sleep'):
-    #        await asyncio.sleep(5)
-    #        await client.send_message(message.channel, 'Done sleeping')
-
-
 @client.event
 async def on_message(message):
     # TODO: Confirm it's the same user if they go through the giving cycle in each step
