@@ -25,16 +25,19 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    # TODO: Give users a structure to use if they say !credits and provide no params
     # TODO: Confirm it's the same user if they go through the giving cycle in each step
-    # TODO: To Lowercase everything that was given in the structure so that it doesn't matter if caps are used
     # TODO: Make this more oop friendly or functional and less procedural for legibility sake
 
-    # INFO: credit giving structure: credits (give, request, destroy, rob) @snowflakeUserId creditAmount
-    # if someone says credits
-    if message.content.startswith('!credits'):
+    # Show help message when the !credits command is entered
+    if message.content.lower() == '!credits':
+        await client.send_message(message.channel, 'You\'re currently missing parameters in your request.\n\n' +
+                                                   'In order to properly respond we need the following information from your query.\n\n' +
+                                                   '(1)!credits (2)Requested Operation (3)Targeted User (4)Credit Amount\n' +
+                                                   'Requested operations are [Give, Request, Destroy, Rob]')
+
+    if message.content.lower().startswith('!credits'):
         # explode the given statement
-        user_input = message.content.split(" ")
+        user_input = message.content.lower().split(" ")
 
         # TODO: Change this to a correct loop instead of a series of ifs
         # Default values here if they don't exist
@@ -59,7 +62,9 @@ async def on_message(message):
 
         # open the credit vault obtain their credit balance
         credit_vault = open("creditVault.csv", "w+")
+        # TODO: Actually locate the authors balance
         author_balance = credit_vault.read()
+        # TODO: If no balance exists then default the balance to 0 and create a new record in the CSV
 
         # obtain users credit balance
         credit_operation["author_balance"] = author_balance
@@ -94,7 +99,9 @@ async def on_message(message):
                         # if the response wasn't user based then reply 'Invalid transaction recipient'
                     # assume we have a good parameter now and get the tagged_user credit balance
 
+        # TODO: Actually locate the authors balance
         tagged_balance = credit_vault.read()
+        # TODO: If no balance exists then default the balance to 0 and create a new record in the CSV
         credit_operation["tagged_balance"] = tagged_balance
 
 #     if fourth param doesn't exist
