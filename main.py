@@ -58,8 +58,6 @@ async def on_message(message):
         # obtain users credit balance
         credit_operation["author_balance"] = author_balance
 
-        await client.send_message(message.channel, credit_operation['operator'])
-
         # TODO: There is potential to optimize it with a python equivalent of this http://es6-features.org/#RestParameter
         # if second param doesnt exist ask 'what would you like do with credits? Options: Give, Request, Destroy, Rob'
         if (
