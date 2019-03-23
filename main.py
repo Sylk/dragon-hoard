@@ -81,8 +81,8 @@ async def on_message(message):
                 await client.send_message(message.channel, 'Transaction ended')
             # append to new message content to credit request
             credit_operation['operator'] = operator
-        await client.send_message(message.channel, 'Operator: ', credit_operation['operator'])
-        # TODO: could write the second check as regex
+            await client.send_message(message.channel, 'Operator: ', credit_operation['operator'])
+
         # if third param doesn't exist ask 'who would you like' second param ' credits to or from?'
         if credit_operation['tagged_user'] is None or (
                 credit_operation['tagged_user'].startswith("<@")
