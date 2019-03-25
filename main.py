@@ -1,7 +1,8 @@
 import discord
 import asyncio
 import os
-import csv
+import sqlite3
+
 
 client = discord.Client()
 DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
@@ -50,11 +51,15 @@ async def on_message(message):
             "credit_amount": user_input[3]
         }
 
+        # NOTE: Should actually be using sqlite https://docs.python.org/3.7/library/sqlite3.html
+        # https://docs.python.org/3.7/library/sqlite3.html#sqlite3.Cursor
         # open the credit vault obtain their credit balance
-        credit_vault = open("creditVault.csv", "w+")
+        credit_vault = sqlite3.connect('creditVault.db')
+        cursor = credit_vault.cursor()
         # TODO: Actually locate the authors balance
-        author_balance = credit_vault.read()
+        author_balance = cursor.executescript("SELECT * WHERE user_id = credit_operation['author']")
         # TODO: If no balance exists then default the balance to 0 and create a new record in the CSV
+
 
         # obtain users credit balance
         credit_operation["author_balance"] = author_balance
