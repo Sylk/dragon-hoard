@@ -1,6 +1,7 @@
 import discord
 import asyncio
 import os
+import csv
 
 client = discord.Client()
 DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
@@ -67,25 +68,31 @@ async def on_message(message):
                 or credit_operation['operator'] != 'destroy'
                 or credit_operation['operator'] != 'rob')
         ):
+            await client.send_message(message.channel, 'Invalid operation parameter, transaction ended.')
+            return
             # NOTE: Documentation to reference for waiting for a message https://discordpy.readthedocs.io/en/latest/api.html#discord.Client.wait_for_message
             # ask for a valid second parameter
-            await client.send_message(message.channel, 'Please provide a valid second parameter. Options: give, request, destroy, or rob')
-            operator = await client.wait_for_message(author=message.author, content='$operator')
+            # await client.send_message(message.channel, 'Please provide a valid second parameter. Options: give, request, destroy, or rob')
+            # operator = await client.wait_for_message(author=message.author, content='$operator')
             # check response to see if it doesn't contain (give, request, destroy, rob)
-            if operator != 'give' and operator != 'request' and operator != 'destroy' and operator != 'rob':
+            # if operator != 'give' and operator != 'request' and operator != 'destroy' and operator != 'rob':
                 # then return 'Transaction ended.'
-                await client.send_message(message.channel, 'Transaction ended')
+                # await client.send_message(message.channel, 'Transaction ended')
             # append to new message content to credit request
-            credit_operation['operator'] = operator
-            await client.send_message(message.channel, 'Operator: ', credit_operation['operator'])
+            # credit_operation['operator'] = operator
+            # await client.send_message(message.channel, 'Operator: ', credit_operation['operator'])
 
         # if third param doesn't exist ask 'who would you like' second param ' credits to or from?'
-        if credit_operation['tagged_user'] is None or (
+        if (
+                credit_operation['tagged_user'] is None or (
                 credit_operation['tagged_user'].startswith("<@")
                 and credit_operation['tagged_user'].endswith(">")
-                and len(credit_operation['tagged_user']) == 21):
-                    # ask for a valid user
-                    await client.send_message(message.channel, 'Please provide a valid third parameter.')
+                and len(credit_operation['tagged_user']) == 21)
+        ):
+            await client.send_message(message.channel, 'Invalid transaction recipient, transaction ended.')
+            return
+            # ask for a valid user
+                    # await client.send_message(message.channel, 'Please provide a valid third parameter.')
                     # wait for a user based response
                         # if the response wasn't user based then reply 'Invalid transaction recipient'
                     # assume we have a good parameter now and get the tagged_user credit balance
@@ -99,6 +106,7 @@ async def on_message(message):
         if isinstance(credit_operation['credit_amount'], int):
             # return 'Transaction ended, invalid credit amount.'
             await client.send_message(message.channel, 'Transaction ended, invalid credit amount.')
+            return
 
 #   check the second param against a switch statement
 #     case give
