@@ -3,7 +3,7 @@ from discord.ext import commands
 import sqlite3
 
 
-class Currency(commands.cog):
+class Currency(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.c = sqlite3.connect('currency.db')
@@ -18,19 +18,19 @@ class Currency(commands.cog):
                            'Requested operations are [Give, Request, Destroy, Rob]')
 
     @credits.command()
-    async def give(self, ctx, targeted_user: discord.user, amount: int):  # %credits give
+    async def give(self, ctx, targeted_user: discord.Member, amount: int):  # %credits give
         pass
 
     @credits.command()
-    async def request(self, ctx, targeted_user: discord.user, amount: int):
+    async def request(self, ctx, targeted_user: discord.Member, amount: int):
         pass
 
     @credits.command()
-    async def destroy(self, ctx, targeted_user: discord.user, amount: int):
+    async def destroy(self, ctx, targeted_user: discord.Member, amount: int):
         pass
 
     @credits.command()
-    async def rob(self, ctx, targeted_user: discord.user, amount: int):
+    async def rob(self, ctx, targeted_user: discord.Member, amount: int):
         pass
 
 
