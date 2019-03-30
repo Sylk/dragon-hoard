@@ -1,5 +1,5 @@
   
-![](assets/logo_desc.png)  
+![](./assets/logo_desc.png)  
 
 # Commands
 
