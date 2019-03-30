@@ -6,20 +6,29 @@ import sqlite3
 class Currency(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.c = sqlite3.connect('currency.db')
-        self.connect = self.c.cursor()
+        self.conn = sqlite3.connect('currency.db')
+        self.c = self.conn.cursor()
+
+    def modify_balance(self, author, target, amount):
+        self.c.execute(f"UPDATE CURRENCY SET balance = balance+{amount} where (UID={author})")
+        self.c.execute(
+            f"UPDATE CURRENCY SET balance = balance+{-amount} where (UID={target})")  # sql is awful, you cant do balance = balance - amount,
+                                                                                      #  has to be balance = balance + -amount
+        self.conn.commit()
 
     @commands.group()  # %credits
     async def credits(self, ctx):
         if ctx.invoked_subcommand is None:
-            await ctx.send('You\'re currently missing parameters in your request.\n\n' +
-                           'In order to properly respond we need the following information from your query.\n\n' +
-                           '(1)!credits (2)Requested Operation (3)Targeted User (4)Credit Amount\n' +
-                           'Requested operations are [Give, Request, Destroy, Rob]')
+            self.c.execute(f"SELECT balance FROM currency WHERE UID={ctx.author.id}")
+            author_balance = self.c.fetchone()
+            await ctx.send(f'You currently have {author_balance} credits')
 
     @credits.command()
     async def give(self, ctx, targeted_user: discord.Member, amount: int):  # %credits give
-        pass
+        if amount > 0:
+            self.modify_balance(ctx.author.id, targeted_user.id, -amount)
+        else:
+            ctx.send("Enter in a value greater than 1")
 
     @credits.command()
     async def request(self, ctx, targeted_user: discord.Member, amount: int):
