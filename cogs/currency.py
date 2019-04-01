@@ -52,8 +52,13 @@ class Currency(commands.Cog):
                 await ctx.send("Request timed out!")
 
     @credits.command()
-    async def destroy(self, ctx, targeted_user: discord.Member, amount: int):
-        pass
+    async def destroy(self, ctx, amount: int):
+        if amount>0:
+            self.c.execute("UPDATE CURRENCY SET balance = balance + ? where UID = ?", [-amount, ctx.author.id])
+            await ctx.send(f"Destroyed {amount} of {ctx.author.mention}'s gold")
+            self.conn.commit()
+        else:
+            await ctx.send("Don't try to destroy a negative amount")
 
     @credits.command()
     async def rob(self, ctx, targeted_user: discord.Member, amount: int):
