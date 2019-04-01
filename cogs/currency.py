@@ -10,16 +10,15 @@ class Currency(commands.Cog):
         self.c = self.conn.cursor()
 
     def modify_balance(self, author, target, amount):
-        self.c.execute(f"UPDATE CURRENCY SET balance = balance+{amount} where (UID={author})")
+        self.c.execute("UPDATE CURRENCY SET balance = balance + ? where UID = ?", [amount, author])
         self.c.execute(
-            f"UPDATE CURRENCY SET balance = balance+{-amount} where (UID={target})")  # sql is awful, you cant do balance = balance - amount,
-                                                                                      #  has to be balance = balance + -amount
+            "UPDATE CURRENCY SET balance = balance + ? where UID = ?", [-amount, target])
         self.conn.commit()
 
     @commands.group()  # %credits
     async def credits(self, ctx):
         if ctx.invoked_subcommand is None:
-            self.c.execute(f"SELECT balance FROM currency WHERE UID={ctx.author.id}")
+            self.c.execute("SELECT balance FROM currency WHERE UID = ?", [ctx.author.id])
             author_balance = self.c.fetchone()
             await ctx.send(f'You currently have {author_balance} credits')
 
@@ -28,11 +27,29 @@ class Currency(commands.Cog):
         if amount > 0:
             self.modify_balance(ctx.author.id, targeted_user.id, -amount)
         else:
-            ctx.send("Enter in a value greater than 1")
+            await ctx.send("Enter in a value greater than 1")
 
     @credits.command()
     async def request(self, ctx, targeted_user: discord.Member, amount: int):
-        pass
+        if amount > 0:
+
+            def check_reaction(msg): #defined inside request method so it can use the local target_user variable
+                if (msg.content.startswith('$accept') or msg.content.startswith('$deny')) and msg.author == targeted_user:
+                    return True
+
+            await ctx.send(f"{ctx.author.mention} requested {amount} from {targeted_user.mention}, type $accept or $deny")
+
+            response_message = await self.bot.wait_for('message', timeout = 20, check=check_reaction) # takes a predicate
+
+            if response_message.content.startswith('$deny'): # Use a different prefix, otherwise the bot will get a command error
+                await ctx.send(f"{targeted_user.mention} denied {ctx.author.mention}'s request for {amount}")
+
+            elif response_message.content.startswith('$accept'): # This could be changed to become a command that checks a queue of some kind but this seems better for now
+                await ctx.send(f"{targeted_user.mention} approved {ctx.author.mention}'s request for {amount}")
+                self.modify_balance(targeted_user.id, ctx.author.id, -amount)
+
+            elif response_message is None:
+                await ctx.send("Request timed out!")
 
     @credits.command()
     async def destroy(self, ctx, targeted_user: discord.Member, amount: int):
