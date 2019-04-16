@@ -38,8 +38,7 @@ TODO: description of rob
 # Setup  
 
 **install discord.py**  
-Dragon hoard runs on forked version of version of `discord.py` referred to as "the rewrite". 
-which has must have pip installed to use. 
+Dragon hoard runs on forked version of version of `discord.py` referred to as "the rewrite" which has must have pip installed to use. 
 
 https://pip.pypa.io/en/stable/installing/
 
