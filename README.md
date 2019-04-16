@@ -1,6 +1,10 @@
   
 ![alt](./assets/logo_desc.PNG)  
 
+# Initial Run
+
+On first run this bot will scrape all users from your server and give them all a balance of 1000 credits that are currently only usable on the server that the bot is running on.
+
 # Commands
 
 **`request`**   
