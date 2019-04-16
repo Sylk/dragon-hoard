@@ -6,27 +6,27 @@
 **`request`**   
 TODO: description of request
 ```
-!request <arg1> .. <argn>
+!credits request username amountOfCredits
 ```
 ---- 
 **`give`**  
 TODO: description of give
 ```
-!give <arg1> ... <argn> 
+!credits give username amountOfCredits
 ```
 ---- 
 
 **`destroy`**  
 TODO: description of destroy  
 ```
-!destroy <arg1> ... <argn>
+!credits destroy amountOfCredits
 ```
 ---- 
 
 **`rob`**  
 TODO: description of rob
 ```
-!rob <arg1> ... <argn> 
+!credits rob username amountOfCredits
 ```
 ---- 
 
@@ -35,7 +35,9 @@ TODO: description of rob
 
 **install discord.py**  
 Dragon hoard runs on forked version of version of `discord.py` referred to as "the rewrite". 
-you can install it by running the following command:    
+which has must have pip installed to use. Then you can run the following command to get `discord.py`:    
+
+https://pip.pypa.io/en/stable/installing/
 
 ```
 python3 -m pip install -U git+https://github.com/Rapptz/discord.py@rewrite
