@@ -8,20 +8,20 @@ On first run this bot will scrape all users from your server and give them all a
 # Commands
 
 **`request`**   
-TODO: description of request
+The request command allows you to request an amount of credits from a specified user from their own balance to transfer into your balance.
 ```
 !credits request username amountOfCredits
 ```
 ---- 
 **`give`**  
-TODO: description of give
+The give command allows you to give an ammount of credits from your own balance into a specified user balance.
 ```
 !credits give username amountOfCredits
 ```
 ---- 
 
 **`destroy`**  
-TODO: description of destroy  
+The destroy command permanently deletes credits in your personal balance and reduces the pool of credits on the server.
 ```
 !credits destroy amountOfCredits
 ```
