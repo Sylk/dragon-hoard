@@ -39,9 +39,11 @@ TODO: description of rob
 
 **install discord.py**  
 Dragon hoard runs on forked version of version of `discord.py` referred to as "the rewrite". 
-which has must have pip installed to use. Then you can run the following command to get `discord.py`:    
+which has must have pip installed to use. 
 
 https://pip.pypa.io/en/stable/installing/
+
+Then you can run the following command to get `discord.py`:
 
 ```
 python3 -m pip install -U git+https://github.com/Rapptz/discord.py@rewrite
